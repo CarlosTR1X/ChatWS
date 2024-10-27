@@ -10,20 +10,19 @@ const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
 
-// Middleware
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 app.use(cors());
 
-// Crear un servidor HTTP
+
 const server = http.createServer(app);
 
-// Configurar Socket.io
 const io = new Server(server, {
 
     cors: {
-        origin: '*', // Cambia el puerto según tu aplicación frontend
+        origin: '*', 
         methods: ['GET', 'POST'],
         allowedHeaders: ['my-custom-header'],
         credentials: true
@@ -34,32 +33,32 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
     console.log('Un usuario se ha conectado');
 
-    // Manejar eventos de Socket.io
+   
     socket.on('message', (msg) => {
         console.log('Mensaje recibido:', msg);
-        // Emitir el mensaje a todos los clientes
+        
         io.emit('message', msg);
     });
 
-    // Evento de desconexión
+   
     socket.on('disconnect', () => {
         console.log('Un usuario se ha desconectado');
     });
 });
-// Rutas
+
 app.use('/', router);
 
 app.get('/login',  (req, res) => {
-    // Envía el archivo HTML cuando se accede a la raíz
+    
     res.sendFile(path.join(__dirname, '/public/index.html'));
 });
 
 app.get('/api', validaToken, (req, res) => {
-    // Envía el archivo HTML cuando se accede a la raíz
+   
     res.sendFile(path.join(__dirname, '/public/index.html'));
 });
 
-// Función para autenticar usuarios
+
 async function autenticarUsuario(username, password) {
     try {
         const db = await dbUser();
@@ -67,7 +66,7 @@ async function autenticarUsuario(username, password) {
         console.log(username, password)
         
         
-        // Buscar el usuario por nombre de usuario y contraseña
+        
         const user = await usuariosCollection.findOne({user: username, pass: password});
         console.log(user)
         if (user) {
@@ -81,7 +80,7 @@ async function autenticarUsuario(username, password) {
     }
 }
 
-// Ruta para autenticación
+
 app.post('/auth', async (req, res) => {
     const { username, password } = req.body;
     const authResult = await autenticarUsuario(username, password);
@@ -97,12 +96,12 @@ app.post('/auth', async (req, res) => {
     }
 });
 
-// Generar un token de acceso
+
 function generateAccessToken(user) {
     return jwt.sign(user, process.env.SECRET, { expiresIn: '10m' });
 }
 
-// Middleware para validar el token
+
 function validaToken(req, res, next) {
     const accessToken = req.header['authorization'] || req.query.accessToken;
     if (!accessToken) return res.status(403).send('Acceso denegado');
@@ -116,7 +115,7 @@ function validaToken(req, res, next) {
     });
 }
 
-// Iniciar el servidor
+
 const port = 3000;
 server.listen(port, () => {
     console.log("SERVICIO ACTIVO");

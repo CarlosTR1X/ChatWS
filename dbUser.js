@@ -15,7 +15,6 @@ async function dbUser() {
   try {
     await client.connect(); 
     const db = client.db('usuarios');
-    //const user = await db.collection("usuario").find().toArray();
     return db
   } catch (error) {
     console.error("Failed to connect to MongoDB:", error);

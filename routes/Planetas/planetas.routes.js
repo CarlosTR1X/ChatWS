@@ -13,5 +13,4 @@ routerPlanetas.get('/listar', async (req, res) => {
 
 
 
-//exports always in the end
 module.exports = routerPlanetas

@@ -1,5 +1,5 @@
 const express = require('express');
-const dbConexion = require('../../dbConnection'); // Sin destructuración
+const dbConexion = require('../../dbConnection'); 
 const routerPersonaje = express.Router();
 
 routerPersonaje.get('/listar', async (req, res) => {
